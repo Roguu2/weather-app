@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+@layer base {
+  :root {
+    --background:0 0% 85%;
+    --foreground: 0 0% 27%; /* hsl(0, 0%, 100%) odpowiada #D9D9D9 */
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 85%;
+
+    --popover: 0 0% 85%;
+    --popover-foreground: 0 0% 27%;
+
+    --primary: 220.9 39.3% 11%;
+    --primary-foreground: 210 20% 98%;
+
+    --secondary: 0 0% 85%; /* hsl(0, 0%, 100%) odpowiada #D9D9D9 */
+    --secondary-foreground: 220.9 39.3% 11%;
+
+    --muted: 0 0% 85%; /* hsl(0, 0%, 100%) odpowiada #D9D9D9 */
+    --muted-foreground: 220 8.9% 46.1%;
+
+    --accent: 0 14% 93%; /* hsl(0, 0%, 100%) odpowiada #D9D9D9 */
+    --accent-foreground: 220.9 39.3% 11%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 0 0% 85%; /* hsl(0, 0%, 100%) odpowiada #D9D9D9 */
+    --input: 0 0% 85%; /* hsl(0, 0%, 100%) odpowiada #D9D9D9 */
+    --ring: 0 0% 85%; /* hsl(0, 0%, 100%) odpowiada #D9D9D9 */
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 27%; /* hsl(0, 0%, 27%) odpowiada #444444 */
+    --foreground: 210 20% 98%;
+
+    --card: 0 0% 27%; /* hsl(0, 0%, 27%) odpowiada #444444 */
+    --card-foreground: 210 20% 98%;
+
+    --popover: 0 0% 27%; /* hsl(0, 0%, 27%) odpowiada #444444 */
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 210 20% 98%;
+    --primary-foreground: 220.9 39.3% 11%;
+
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+
+    --accent: 0 2% 35%;
+    --accent-foreground: 210 20% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 215 27.9% 16.9%;
+    --input: 215 27.9% 16.9%;
+    --ring: 216 12.2% 83.9%;
+    
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    font-family: "Poppins", sans-serif;
+    @apply bg-custom-gradient-light dark:bg-custom-gradient-dark  text-foreground;
+  }
+}
