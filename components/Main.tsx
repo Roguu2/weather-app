@@ -21,10 +21,8 @@ import {
 } from "react-icons/wi";
 import SunriseSunset from "./Content/SunriseSunset";
 import LocationButton from "./ui/LocationButton";
-import { useTranslation } from "react-i18next";
 
 const Main = () => {
-  const { t } = useTranslation();
   const [data, setData] = useState({});
   const [forecastData, setForecastData] = useState([]);
   const [hourlyForecastData, setHourlyForecastData] = useState([]);
@@ -88,21 +86,18 @@ const Main = () => {
         }
     }
 });
-    
-    for (let [key, value] of map.entries()) {
-      daily.push(value);
-    }
+    map.forEach((value, key) => {
+      if(daily.length >= 5) return;
+      daily.push(value)
+    })
     return daily;
   };
 
   const getHourlyForecasts = (list) => {
     const hourly = [];
     const map = new Map();
-    const today = new Date().toLocaleDateString('en-US'); // Get today's date in the same format
-
     list.forEach((item) => {
         const itemDate = new Date(item.dt * 1000);
-        const date = itemDate.toLocaleDateString('en-US');
         const hour = itemDate.getHours()-2;
         
         if (hour >= 6 && hour <= 21) { // Check if the hour is between 6 and 21
@@ -123,10 +118,10 @@ const Main = () => {
         }
     });
 
-    for (let [key, value] of map.entries()) {
-        if(hourly.length >= 5) break;
-        hourly.push(value);
-    }
+    map.forEach((value, key) => {
+      if (hourly.length >= 5) return;
+      hourly.push(value);
+  });
 
     return hourly;
 };
@@ -269,7 +264,7 @@ const Main = () => {
             />
 
             <WeatherStats
-              statName={t("Clouds")}
+              statName={"Clouds"}
               stat={`${data.wind ? data.clouds.all : null}%`}
               icon={<WiCloudy className="6xl" />}
               position={"left"}
