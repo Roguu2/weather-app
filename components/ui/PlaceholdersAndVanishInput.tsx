@@ -183,7 +183,7 @@ export function PlaceholdersAndVanishInput({
   return (
     <form
       className={cn(
-        "w-96 relative max-w-xl shadow-3xl mx-auto backdrop-blur-md bg-background dark:bg-background  h-12 rounded-full overflow-hidden transition duration-200",
+        "w-[100%] lg:w-96 relative max-w-xl shadow-3xl mx-auto backdrop-blur-md bg-background dark:bg-background  h-12 rounded-full overflow-hidden transition duration-200",
         value
       )}
       onSubmit={handleSubmit}
@@ -207,7 +207,7 @@ export function PlaceholdersAndVanishInput({
         value={value}
         type="text"
         className={cn(
-          "w-full relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-10 pr-20",
+          "w-[100%] relative text-sm sm:text-base z-50 border-none dark:text-white bg-transparent text-black h-full rounded-full focus:outline-none focus:ring-0 pl-4 sm:pl-10 pr-20",
           animating && "text-transparent dark:text-transparent"
         )}
       />

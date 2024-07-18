@@ -6,13 +6,13 @@ const Temp = ({
     temp?: number | string; feelsTemp?:number | string; icon?:React.ReactNode; position?:string;
 }) => {
   return (
-    <div className="flex flex-col col-span-2">
-        <div className='h-[50%] flex justify-center items-center text-7xl'>
+    <div className="flex flex-col p-3 gap-y-4 w-[100%]">
+        <div className='flex items-center justify-center text-3xl lg:text-6xl'>
             {position === 'left' && icon}
             {temp}
             {position === 'right' && icon}
         </div>
-        <div className='h-[50%] flex justify-center items-start text-3xl'>
+        <div className='flex items-center justify-center text-base lg:text-4xl'>
             <p className='mr-1 text-center'>Feels like:</p>
             {position === 'left' && icon}
             {feelsTemp}

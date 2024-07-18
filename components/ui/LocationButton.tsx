@@ -7,9 +7,9 @@ const LocationButton = ({
 }) => {
   return (
     <div>
-        <button className="relative inline-flex items-center justify-center h-12 gap-1 text-lg px-6 py-2 bg-[#4CBB17] text-white rounded-3xl font-bold transform hover:-translate-y-1 transition duration-400" onClick={handleClick}>
-          {position === 'left' && icon}
-          {title}
+        <button className="relative inline-flex items-center justify-center h-12 gap-1 w-[100%] text-sm lg:text-base px-6 py-2 bg-[#4CBB17] text-white rounded-3xl font-bold transform hover:-translate-y-1 transition duration-400" onClick={handleClick}>
+          {position === 'left' && <span>{icon}</span>}
+          <span>{title}</span>
           {position === 'right' && icon}
         </button>
     </div>
