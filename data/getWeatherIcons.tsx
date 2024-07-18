@@ -20,7 +20,7 @@ export const getWeatherIcon = (weather) => {
         return <WiThunderstorm />;
       case 'Snow':
         return <WiSnow />;
-      case 'Fog':
+      case 'Mist':
         return <WiFog />;
       case 'Night Clear':
         return <WiNightClear />;

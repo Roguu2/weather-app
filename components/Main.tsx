@@ -4,7 +4,7 @@ import { ModeToggle } from "./ui/ThemeToggle";
 import { PlaceholdersAndVanishInput } from "./ui/PlaceholdersAndVanishInput";
 import { FaLocationCrosshairs } from "react-icons/fa6";
 import { TbTemperatureCelsius } from "react-icons/tb";
-import { placeholders } from "@/data";
+import { data, placeholders } from "@/data";
 import axios from "axios";
 import dayjs from "dayjs";
 import Temp from "./Content/Temp";
@@ -23,46 +23,42 @@ import SunriseSunset from "./Content/SunriseSunset";
 import LocationButton from "./ui/LocationButton";
 
 const Main = () => {
-  const [data, setData] = useState({});
-  const [forecastData, setForecastData] = useState([]);
-  const [hourlyForecastData, setHourlyForecastData] = useState([]);
+  const [data, setData] = useState<data | null>({});
+  const [forecastData, setForecastData] = useState<any>(null);
+  const [hourlyForecastData, setHourlyForecastData] = useState<any>(null);
   const [location, setLocation] = useState("");
   const [showData, setShowData] = useState(false);
   const apiKey = "1ed9d3d917a3b45b1e199558921413e1";
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
   const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${apiKey}&units=metric`;
 
-  const searchLocation = (event) => {
+  const searchLocation = async (event) => {
     event.preventDefault();
-
-    axios
-      .get(forecastUrl)
-      .then((forecastResponse) => {
-        const dailyForecasts = getDailyForecasts(forecastResponse.data.list);
-        const hourlyForecast = getHourlyForecasts(forecastResponse.data.list)
-        setForecastData(dailyForecasts);
-        setHourlyForecastData(hourlyForecast)
-
-        console.log(`FORECAST : `, dailyForecasts);
-        console.log(`HOURLY FORECAST : `, hourlyForecast);
-        console.log(forecastUrl)
-        setShowData(true);
-      })
-      .catch((error) => {
-        window.alert("Nie ma takiego miasta");
-        console.log(error)
-        setShowData(false);
-      });
-    axios
-      .get(url)
-      .then((response) => {
-        setData(response.data);
-        console.log(`CURRENT : `, response.data);
-        setShowData(true);
-      })
-      .catch(() => {
-        setShowData(false);
-      });
+  
+    try {
+      const [forecastResponse, currentResponse] = await Promise.all([
+        axios.get(forecastUrl),
+        axios.get(url)
+      ]);
+  
+      const dailyForecasts = getDailyForecasts(forecastResponse.data.list);
+      const hourlyForecast = getHourlyForecasts(forecastResponse.data.list);
+      
+      setForecastData(dailyForecasts);
+      setHourlyForecastData(hourlyForecast);
+      setData(currentResponse.data);
+  
+      console.log(`FORECAST : `, dailyForecasts);
+      console.log(`HOURLY FORECAST : `, hourlyForecast);
+      console.log(`CURRENT : `, currentResponse.data, data.dt * 1000);
+      console.log(forecastUrl);
+  
+      setShowData(true);
+    } catch (error) {
+      window.alert("Nie ma takiego miasta");
+      console.log(error);
+      setShowData(false);
+    }
   };
 
   const getDailyForecasts = (list) => {
@@ -185,20 +181,14 @@ const Main = () => {
       });
   };
 
+  if (!data) {
+    return <div>Loading...</div>;
+  }
   const formattedDay = dayjs().format("DD-MM-YY");
   const timezone = data.timezone ? data.timezone - 7199 : null;
   const currentTime = timezone ? dayjs().add(timezone, "seconds") : null;
-  const formattedTime = timezone ? currentTime.format("HH:mm") : "";
-
-  const temp = data.main ? data.main.temp.toFixed(0) : "";
-
-  const feelsTemp = data.main ? data.main.feels_like.toFixed(0) : "";
-
-  const weatherStatus = data.weather ? data.weather[0].main : null;
-  const weatherIcon =
-    data.weather && data.weather.length > 0
-      ? getWeatherIcon(data.weather[0].main)
-      : "";
+  const formattedTime = currentTime ? currentTime.format("HH:mm") : "";
+  console.log(formattedDay, timezone, currentTime, formattedTime)
 
   const convertUnixTimeToHours = (unixTime, timezoneOffset) => {
     const date = new Date((unixTime + timezoneOffset) * 1000);
@@ -251,15 +241,15 @@ const Main = () => {
           </div>
           <div className="grid grid-cols-6 grid-rows-2 col-span-2 h-full w-full shadow-3xl backdrop-blur-sm rounded-3xl">
             <Temp
-              temp={temp}
-              feelsTemp={feelsTemp}
+              temp={ data.main?.temp?.toFixed(0) ?? ""}
+              feelsTemp={data.main?.feels_like?.toFixed(0) ?? ""}
               icon={<TbTemperatureCelsius />}
               position={"right"}
             />
 
             <Weather
-              weather={weatherStatus}
-              icon={weatherIcon}
+              weather={data.weather?.[0]?.main ?? ""}
+              icon={data.weather?.[0] ? getWeatherIcon(data.weather[0].main) : ""}
               location={"left"}
             />
 
@@ -278,13 +268,13 @@ const Main = () => {
             <div className="col-span-2 p- flex flex-col">
               <SunriseSunset
                 content={"Sunrise "}
-                time={sunriseTime}
+                time={sunriseTime} //data.sys.sunrise
                 icon={<WiSunrise />}
                 position={"left"}
               />
               <SunriseSunset
                 content={"Sunset "}
-                time={sunsetTime}
+                time={sunsetTime} //data.sys.sunset
                 icon={<WiSunset />}
                 position={"left"}
               />

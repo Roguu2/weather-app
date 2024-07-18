@@ -3,7 +3,7 @@ import React from 'react'
 const SunriseSunset = ({
     content, time,  icon, position 
 }:{
-    content:string; time:string; icon:React.ReactNode; position:string
+    content:string; time:number | string; icon:React.ReactNode; position:string
 }) => {
   return (
         <div className='flex items-center justify-center h-[50%]'>

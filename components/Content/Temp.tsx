@@ -3,7 +3,7 @@ import React from 'react'
 const Temp = ({
     temp, icon, position, feelsTemp
 }:{
-    temp?: string; feelsTemp?:string; icon?:React.ReactNode; position?:string;
+    temp?: number | string; feelsTemp?:number | string; icon?:React.ReactNode; position?:string;
 }) => {
   return (
     <div className="flex flex-col col-span-2">
