@@ -251,7 +251,7 @@ const Main = () => {
           <div
             className={`flex flex-col items-center lg:flex-row lg:col-span-2 h-full w-full p-5 lg:p-0 shadow-3xl backdrop-blur-sm rounded-3xl`}
           >
-            <div className="w-[100%] h-[33%] lg:w-[33%] lg:h-[100%] bg-white/40 dark:bg-white/10 lg:dark:bg-transparent backdrop-blur-sm rounded-3xl p-2 lg:p-0">
+            <div className="w-[100%] h-[33%] lg:w-[33%] lg:h-[100%] bg-white/40 dark:bg-white/10 lg:bg-transparent backdrop-blur-sm rounded-3xl p-2 lg:p-0">
               <div className="h-[50%] flex justify-center items-center">
                 <Temp
                   temp={data.main?.temp?.toFixed(0) ?? ""}
@@ -275,7 +275,7 @@ const Main = () => {
                 />
               </div>
             </div>
-            <div className="w-[100%] h-[33%] lg:w-[33%] lg:h-[100%] bg-white/40 dark:bg-white/10 lg:dark:bg-transparent backdrop-blur-sm rounded-3xl p-2 lg:p-0 my-4">
+            <div className="w-[100%] h-[33%] lg:w-[33%] lg:h-[100%] bg-white/40 dark:bg-white/10 lg:bg-transparent backdrop-blur-sm rounded-3xl p-2 lg:p-0 my-4">
               <Weather
                 weather={data.weather?.[0]?.main ?? ""}
                 icon={
@@ -284,7 +284,7 @@ const Main = () => {
                 location={"left"}
               />
             </div>
-            <div className="grid grid-cols-2 grid-rows-2 gap-2 items-center justify-items-center w-[100%] h-[33%] lg:w-[33%] lg:h-[100%] bg-white/40 dark:bg-white/10 lg:dark:bg-transparent backdrop-blur-sm rounded-3xl p-2 lg:p-0 odd:bg-black">
+            <div className="grid grid-cols-2 grid-rows-2 gap-2 items-center justify-items-center w-[100%] h-[33%] lg:w-[33%] lg:h-[100%] bg-white/40 dark:bg-white/10 lg:bg-transparent backdrop-blur-sm rounded-3xl p-2 lg:p-0">
               <WeatherStats
                 statName={"Clouds"}
                 stat={`${data.wind ? data.clouds.all : null}%`}
