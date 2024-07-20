@@ -2,32 +2,45 @@
 export const placeholders = ["Tokyo", "Madrit", "Cracow", "Oslo", "Paris"];
 
 export interface data {
-  timezone?: number | null;
-  main?: {
-    temp?: number | null;
-    feels_like?: number | null;
-    pressure?: number | null;
-    humidity?: number | null;
-    temp_min?: number | null;
-    temp_max?: number | null;
-  } | null;
+coord?: {
+    lon?: number;
+    lat?: number;
+  };
   weather?: Array<{
-    main?: string | null;
-    description?: string | null;
-    icon?: string | null;
-  }> | null;
-  sys?: {
-    country?: string | null;
-    sunrise?: number | null;
-    sunset?: number | null;
-  } | null;
-  name?: string | null;
+    id?: number;
+    main?: string;
+    description?: string;
+    icon?: string;
+  }>;
+  base?: string;
+  main?: {
+    temp?: number;
+    feels_like?: number;
+    temp_min?: number;
+    temp_max?: number;
+    pressure?: number;
+    humidity?: number;
+    sea_level?: number;
+    grnd_level?: number;
+  };
+  visibility?: number;
   wind?: {
-    speed?: number | null;
-    deg?: number | null;
-  } | null;
+    speed?: number;
+    deg?: number;
+  };
   clouds?: {
-    all?: number | null;
-  }
-  dt?: number
+    all?: number;
+  };
+  dt?: number;
+  sys?: {
+    type?: number;
+    id?: number;
+    country?: string;
+    sunrise?: number;
+    sunset?: number;
+  };
+  timezone?: number;
+  id?: number;
+  name?: string;
+  cod?: number;
 }

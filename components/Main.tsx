@@ -21,6 +21,7 @@ import {
 } from "react-icons/wi";
 import SunriseSunset from "./Content/SunriseSunset";
 import LocationButton from "./ui/LocationButton";
+import geoTz from 'geo-tz';
 
 const Main = () => {
   const [data, setData] = useState<data | null>({});
@@ -48,10 +49,10 @@ const Main = () => {
       setHourlyForecastData(hourlyForecast);
       setData(currentResponse.data);
 
-      console.log(`FORECAST : `, dailyForecasts);
-      console.log(`HOURLY FORECAST : `, hourlyForecast);
-      console.log(`CURRENT : `, currentResponse.data, data.dt * 1000);
-      console.log(forecastUrl);
+      // console.log(`FORECAST : `, dailyForecasts);
+      // console.log(`HOURLY FORECAST : `, hourlyForecast);
+      // console.log(`CURRENT : `, currentResponse.data, data.dt * 1000);
+      // console.log(forecastUrl);
 
       setShowData(true);
     } catch (error) {
@@ -87,6 +88,7 @@ const Main = () => {
     map.forEach((value, key) => {
       if (daily.length >= 5) return;
       daily.push(value);
+      console.log(value)
     });
     return daily;
   };
@@ -101,7 +103,7 @@ const Main = () => {
       if (hour >= 6 && hour <= 21) {
         // Check if the hour is between 6 and 21
         const timeKey = itemDate.toLocaleTimeString("en-US");
-        console.log(hour);
+        // console.log(hour);
 
         if (!map.has(timeKey)) {
           map.set(timeKey, item);
@@ -184,11 +186,13 @@ const Main = () => {
   if (!data) {
     return <div>Loading...</div>;
   }
+
+
   const formattedDay = dayjs().format("DD-MM-YY");
   const timezone = data.timezone ? data.timezone - 7199 : null;
   const currentTime = timezone ? dayjs().add(timezone, "seconds") : null;
   const formattedTime = currentTime ? currentTime.format("HH:mm") : "";
-  console.log(formattedDay, timezone, currentTime, formattedTime);
+  // console.log(formattedDay);
 
   const convertUnixTimeToHours = (unixTime, timezoneOffset) => {
     const date = new Date((unixTime + timezoneOffset) * 1000);
@@ -205,12 +209,12 @@ const Main = () => {
   );
 
   return (
-    <section className="max-w-8xl w-4/5 h-full m-3 relative">
+    <section className="max-w-8xl w-4/5 h-full m-3">
       <section
         id="Top"
-        className="flex-col gap-y-3 lg:flex-row flex items-center justify-center lg:justify-between w-full"
+        className="flex flex-col gap-y-3 lg:flex-row items-center justify-center lg:justify-between w-full"
       >
-        <div className="w-full mx-5 flex justify-center items-center">
+        <div className="w-full mx-5 flex justify-start lg:justify-center items-center mb-16 lg:mb-0">
           <ModeToggle />
         </div>
         <div className="mx-5 lg:w-full flex justify-center items-center">
@@ -221,7 +225,7 @@ const Main = () => {
             value={location}
           />
         </div>
-        <div className="w-1/3 mx-5 lg:w-full flex justify-center items-center">
+        <div className="mx-5 lg:w-full flex justify-center items-center">
           <LocationButton
             title="Current Location"
             icon={<FaLocationCrosshairs />}
@@ -236,13 +240,13 @@ const Main = () => {
           className="flex flex-col lg:grid lg:grid-cols-3 gap-y-7 lg:gap-7 justify-items-center w-full h-full p-5 my-10"
         >
           <div className="flex flex-col justify-evenly items-center col-span-1 h-full w-full shadow-3xl backdrop-filter backdrop-blur-sm  backdrop-saturate-100 rounded-3xl p-4">
-            <p className="text-lg lg:text-5xl font-medium text-center">
+            <p className="text-lg lg:text-4xl font-medium text-center ">
               {data.name}
             </p>
             <p className="text-3xl lg:text-7xl font-medium text-center">
               {formattedTime}
             </p>
-            <p className="text-1xl lg:text-5xl text-center">{formattedDay}</p>
+            <p className="text-1xl lg:text-3xl text-center">{formattedDay}</p>
           </div>
           <div
             className={`flex flex-col items-center lg:flex-row lg:col-span-2 h-full w-full p-5 lg:p-0 shadow-3xl backdrop-blur-sm rounded-3xl`}
@@ -280,70 +284,75 @@ const Main = () => {
                 location={"left"}
               />
             </div>
-            <div className="flex flex-col justify-center lg:flex-row w-[100%] h-[40%] lg:w-[33%] lg:h-[100%] bg-white/40 dark:bg-white/10 lg:dark:bg-transparent backdrop-blur-sm rounded-3xl p-2 lg:p-0">
-              <div className="flex flex-col justify-center items-center lg:gap-y-5 lg:w-[50%] m-auto" >
-                <WeatherStats
-                  statName={"Clouds"}
-                  stat={`${data.wind ? data.clouds.all : null}%`}
-                  icon={<WiCloudy className="6xl" />}
-                  position={"left"}
-                />
-                <WeatherStats
-                  statName={"Speed"}
-                  stat={`${data.wind ? data.wind.speed : null} m/s`}
-                  icon={<WiStrongWind />}
-                  position={"left"}
-                />
-              </div>
-              <div className="flex flex-col justify-center items-center lg:gap-y-5 lg:w-[50%]  m-auto">
-                <WeatherStats
-                  statName={"Pressure"}
-                  stat={`${data.main ? data.main.pressure : null}hPa`}
-                  icon={<WiBarometer />}
-                  position={"left"}
-                />
-                <WeatherStats
-                  statName={"Humidity"}
-                  stat={`${data.main ? data.main.humidity : null}%`}
-                  icon={<WiHumidity />}
-                  position={"left"}
-                />
-              </div>
+            <div className="grid grid-cols-2 grid-rows-2 gap-2 items-center justify-items-center w-[100%] h-[33%] lg:w-[33%] lg:h-[100%] bg-white/40 dark:bg-white/10 lg:dark:bg-transparent backdrop-blur-sm rounded-3xl p-2 lg:p-0 odd:bg-black">
+              <WeatherStats
+                statName={"Clouds"}
+                stat={`${data.wind ? data.clouds.all : null}%`}
+                icon={<WiCloudy />}
+                position={"left"}
+                className={""}
+              />
+              <WeatherStats
+                statName={"Speed"}
+                stat={`${data.wind ? data.wind.speed : null} m/s`}
+                icon={<WiStrongWind />}
+                position={"left"}
+                className={""}
+              />
+              <WeatherStats
+                statName={"Pressure"}
+                stat={`${data.main ? data.main.pressure : null}hPa`}
+                icon={<WiBarometer />}
+                position={"left"}
+                className={"col-start-2 row-start-2"}
+              />
+              <WeatherStats
+                statName={"Humidity"}
+                stat={`${data.main ? data.main.humidity : null}%`}
+                icon={<WiHumidity />}
+                position={"left"}
+                className={"col-start-1 row-start-2"}
+              />
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center lg:flex-row col-span-2 h-4/5 w-full shadow-3xl backdrop-blur-sm rounded-3xl gap-2 overflow-hidden p-5">
-            {hourlyForecastData &&
-              hourlyForecastData.map((forecast, index) => {
-                const forecastDate = new Date(forecast.dt * 1000);
-                forecastDate.setHours(forecastDate.getHours() - 2);
+          <div className="flex flex-col justify-center items-center  col-span-2 h-4/5 w-full shadow-3xl backdrop-blur-sm rounded-3xl gap-4 overflow-hidden p-5">
+            <div>
+              <p className="text-center text-3xl">HOURLY FORECAST</p>
+            </div>
+            <div className="flex flex-col lg:flex-row gap-5 w-full">
+              {hourlyForecastData &&
+                hourlyForecastData.map((forecast, index) => {
+                  const forecastDate = new Date(forecast.dt * 1000);
+                  forecastDate.setHours(forecastDate.getHours() - 2);
 
-                return (
-                  <div
-                    key={index}
-                    className=" hover:scale-105 cursor-pointer transition flex flex-col justify-evenly w-full items-center h-full bg-white/40 dark:bg-white/10 backdrop-blur-sm rounded-3xl gap-4 p-5"
-                  >
-                    <span className="text-9xl">
-                      {getWeatherIcon(forecast.weather[0].main)}
-                    </span>
-                    <h3 className="text-2xl">
-                      {forecastDate.toLocaleDateString("en-US", {
-                        weekday: "long",
-                      })}
-                    </h3>
-                    <span>
-                      {forecastDate.toLocaleTimeString("pl-PL", {
-                        hourCycle: "h24",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </span>
-                    <span>{forecast.main.temp.toFixed(0)}°C</span>
-                  </div>
-                );
-              })}
+                  return (
+                    <div
+                      key={index}
+                      className="transition flex flex-col justify-evenly w-full items-center h-full bg-white/40 dark:bg-white/10 backdrop-blur-sm rounded-3xl gap-4 p-5"
+                    >
+                      <span className="text-9xl">
+                        {getWeatherIcon(forecast.weather[0].main)}
+                      </span>
+                      <h3 className="text-2xl">
+                        {forecastDate.toLocaleDateString("en-US", {
+                          weekday: "long",
+                        })}
+                      </h3>
+                      <span>
+                        {forecastDate.toLocaleTimeString("pl-PL", {
+                          hourCycle: "h24",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                      <span>{forecast.main.temp.toFixed(0)}°C</span>
+                    </div>
+                  );
+                })}
+            </div>
           </div>
-          <div className="flex flex-col gap-4 lg:gap-0 justify-evenly p-5 h-4/5 w-full shadow-3xl backdrop-blur-sm rounded-3xl">
-          <p className="text-center text-3xl mb-4">5-DAY FORECAST</p>
+          <div className="flex flex-col gap-4 lg:gap-2 justify-evenly p-5 h-4/5 w-full shadow-3xl backdrop-blur-sm rounded-3xl">
+            <p className="text-center text-3xl mb-4">5-DAY FORECAST</p>
             {forecastData &&
               forecastData.map((forecast, index) => (
                 <div

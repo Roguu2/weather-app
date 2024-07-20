@@ -11,7 +11,7 @@ const Weather = ({
             {location === 'left' && (
                 <div className='text-8xl lg:text-9xl'>{icon}</div>
             )}
-            <p className='text-5xl lg:text-5xl'>{weather}</p>            
+            <p className='text-2xl lg:text-5xl'>{weather}</p>            
             {location === 'right' && (
                 <div className='text-9xl'>{icon}</div>
             )}
